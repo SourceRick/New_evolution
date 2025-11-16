@@ -150,3 +150,1833 @@ body {
     padding: 8px 16px;
     font-size: 0.9em;
 }
+/* ============================================= */
+/* ESTILOS PARA SISTEMA DE ATIVIDADES E TRABALHOS */
+/* ============================================= */
+
+/* Badges */
+.badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.badge-success {
+    background: var(--success);
+    color: white;
+}
+
+.badge-warning {
+    background: var(--warning);
+    color: white;
+}
+
+.badge-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.badge-secondary {
+    background: var(--secondary);
+    color: white;
+}
+
+/* Activity Items Melhorados */
+.activity-item {
+    background: var(--light);
+    border-left: 4px solid var(--primary);
+    padding: 20px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
+}
+
+.activity-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Trabalhos Entregues */
+.activity-item.trabalho-entregue {
+    border-left: 4px solid var(--success);
+    background: linear-gradient(135deg, var(--light) 0%, #f0f9f0 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.activity-item.trabalho-entregue::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 40px 40px 0;
+    border-color: transparent var(--success) transparent transparent;
+}
+
+.activity-item.trabalho-entregue::after {
+    content: '✓';
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.activity-item.trabalho-entregue h4 {
+    color: var(--success);
+    position: relative;
+}
+
+/* Botões Melhorados */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #0da271;
+}
+
+.btn-success:disabled {
+    background: #a7f3d0;
+    color: #065f46;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background: var(--secondary);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #475569;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+/* Botões pequenos */
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.9em;
+}
+
+/* Estados dos botões */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Loading e Animações */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #e2e8f0;
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Modal Improvements */
+#modal-overlay {
+    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Progress Bars */
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--success);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--secondary);
+    margin-top: 5px;
+}
+
+/* Stats Container */
+.stats-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.stat-item {
+    flex: 1;
+    padding: 10px;
+}
+
+.stat-number {
+    font-size: 2em;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.9em;
+    color: var(--secondary);
+}
+
+/* Responsividade para Mobile */
+@media (max-width: 768px) {
+    .activity-item {
+        padding: 16px;
+    }
+    
+    .btn {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+    
+    .stats-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .stat-item {
+        padding: 8px;
+    }
+    
+    .stat-number {
+        font-size: 1.5em;
+    }
+    
+    /* Ajustes para telas pequenas nos elementos de atividade */
+    .activity-item > div {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+    
+    .activity-item .badge {
+        align-self: flex-start !important;
+    }
+}
+
+/* Melhorias de Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    .activity-item,
+    .btn,
+    .progress-bar {
+        transition: none;
+    }
+    
+    .fade-in {
+        animation: none;
+    }
+}
+
+/* Estados de foco para acessibilidade */
+.btn:focus,
+.form-control:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Text Selection */
+::selection {
+    background: var(--primary);
+    color: white;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #1d4ed8;
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.mb-3 {
+    margin-bottom: 16px;
+}
+
+.mt-3 {
+    margin-top: 16px;
+}
+
+.mb-4 {
+    margin-bottom: 24px;
+}
+
+/* Flex utilities */
+.d-flex {
+    display: flex;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.gap-10 {
+    gap: 10px;
+}
+
+.gap-15 {
+    gap: 15px;
+}
+
+/* Icon colors */
+.fa-check-circle {
+    color: var(--success);
+}
+
+.fa-clock {
+    color: var(--warning);
+}
+
+.fa-user-graduate {
+    color: var(--primary);
+}
+
+.fa-star {
+    color: var(--warning);
+}
+
+.fa-file-alt {
+    color: var(--primary);
+}
+
+.fa-clipboard-check {
+    color: var(--danger);
+}
+
+.fa-project-diagram {
+    color: var(--success);
+}
+
+.fa-pencil-alt {
+    color: var(--warning);
+}
+
+.fa-list-ol {
+    color: var(--secondary);
+}
+/* ============================================= */
+/* ESTILOS PARA SISTEMA DE ATIVIDADES E TRABALHOS */
+/* ============================================= */
+
+/* Badges */
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+    text-align: center;
+}
+
+.badge-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.badge-success {
+    background: var(--success);
+    color: white;
+}
+
+.badge-warning {
+    background: var(--warning);
+    color: white;
+}
+
+.badge-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.badge-secondary {
+    background: var(--secondary);
+    color: white;
+}
+
+/* Activity Items Melhorados */
+.activity-item {
+    background: var(--background);
+    border-left: 4px solid var(--primary);
+    padding: 20px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border);
+    position: relative;
+}
+
+.activity-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--shadow);
+}
+
+/* Trabalhos Entregues */
+.activity-item.trabalho-entregue {
+    border-left: 4px solid var(--success);
+    background: linear-gradient(135deg, var(--background) 0%, rgba(16, 185, 129, 0.05) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.activity-item.trabalho-entregue::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 40px 40px 0;
+    border-color: transparent var(--success) transparent transparent;
+}
+
+.activity-item.trabalho-entregue::after {
+    content: '✓';
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 1;
+}
+
+.activity-item.trabalho-entregue h4 {
+    color: var(--success);
+    position: relative;
+}
+
+/* Botões Melhorados */
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #0da271;
+}
+
+.btn-success:disabled {
+    background: #a7f3d0;
+    color: #065f46;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.8;
+}
+
+.btn-secondary {
+    background: var(--secondary);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #475569;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+/* Botões pequenos */
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.9em;
+}
+
+/* Estados dos botões */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Loading e Animações */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid var(--border);
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Modal Improvements */
+#modal-overlay {
+    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+/* Progress Bars */
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--success);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    margin-top: 5px;
+}
+
+/* Stats Container */
+.stats-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    text-align: center;
+    gap: 15px;
+}
+
+.stat-item {
+    flex: 1;
+    padding: 10px;
+}
+
+.stat-number {
+    font-size: 2em;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+/* Responsividade para Mobile */
+@media (max-width: 768px) {
+    .activity-item {
+        padding: 16px;
+    }
+    
+    .btn {
+        padding: 10px 16px;
+        font-size: 13px;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .stats-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .stat-item {
+        padding: 8px;
+    }
+    
+    .stat-number {
+        font-size: 1.5em;
+    }
+    
+    /* Ajustes para telas pequenas nos elementos de atividade */
+    .activity-item > div {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+    
+    .activity-item .badge {
+        align-self: flex-start !important;
+    }
+    
+    /* Botões em coluna no mobile */
+    .activity-item > div:last-child {
+        flex-direction: column !important;
+    }
+    
+    .activity-item > div:last-child > div:last-child {
+        width: 100%;
+    }
+    
+    .activity-item > div:last-child > div:last-child button {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}
+
+/* Melhorias de Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    .activity-item,
+    .btn,
+    .progress-bar {
+        transition: none;
+    }
+    
+    .fade-in {
+        animation: none;
+    }
+}
+
+/* Estados de foco para acessibilidade */
+.btn:focus,
+.form-control:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Text Selection */
+::selection {
+    background: var(--primary);
+    color: white;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #1d4ed8;
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.mb-3 {
+    margin-bottom: 16px;
+}
+
+.mt-3 {
+    margin-top: 16px;
+}
+
+.mb-4 {
+    margin-bottom: 24px;
+}
+
+/* Flex utilities */
+.d-flex {
+    display: flex;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.gap-10 {
+    gap: 10px;
+}
+
+.gap-15 {
+    gap: 15px;
+}
+
+/* Icon colors */
+.fa-check-circle {
+    color: var(--success);
+}
+
+.fa-clock {
+    color: var(--warning);
+}
+
+.fa-user-graduate {
+    color: var(--primary);
+}
+
+.fa-star {
+    color: var(--warning);
+}
+
+.fa-file-alt {
+    color: var(--primary);
+}
+
+.fa-clipboard-check {
+    color: var(--danger);
+}
+
+.fa-project-diagram {
+    color: var(--success);
+}
+
+.fa-pencil-alt {
+    color: var(--warning);
+}
+
+.fa-list-ol {
+    color: var(--secondary);
+}
+
+.fa-paper-plane {
+    color: white;
+}
+
+.fa-eye {
+    color: white;
+}
+
+.fa-edit {
+    color: white;
+}
+
+/* Estilos específicos para o sistema de atividades */
+.atividade-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.atividade-info {
+    flex: 1;
+    min-width: 250px;
+}
+
+.atividade-descricao {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.atividade-detalhes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.detalhes-info {
+    font-size: 14px;
+    color: var(--text-secondary);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.atividade-acoes {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Feedback messages */
+.feedback-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--surface);
+    color: var(--text);
+    padding: 16px 20px;
+    border-radius: 8px;
+    border: 2px solid var(--success);
+    box-shadow: 0 4px 12px var(--shadow);
+    z-index: 10000;
+    animation: slideInRight 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 300px;
+}
+/* Estilos para atividades */
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.activity-title-section {
+    flex: 1;
+    min-width: 250px;
+}
+
+.activity-title {
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.activity-description {
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.activity-status-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+}
+
+.activity-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+
+.activity-info {
+    font-size: 14px;
+    color: var(--text-secondary);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+/* js/voz.css - Estilos do Sistema de Voz */
+
+/* Container Principal */
+.sistema-voz-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Botão Principal */
+.botao-voz-principal {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    box-shadow: 0 4px 12px var(--shadow);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.botao-voz-principal:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px var(--shadow);
+}
+
+.botao-voz-principal.ativo {
+    background: var(--success);
+    animation: pulse 2s infinite;
+}
+
+.botao-voz-principal:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+}
+
+.icone-voz {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+.botao-voz-principal:hover .icone-voz {
+    transform: scale(1.2);
+}
+
+.status-voz {
+    font-size: 10px;
+    font-weight: bold;
+    opacity: 0.9;
+}
+
+/* Painel de Controle */
+.painel-controle-voz {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 320px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 8px 30px var(--shadow);
+    padding: 0;
+    animation: slideUp 0.3s ease;
+}
+
+.painel-controle-voz.hidden {
+    display: none;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+/* Cabeçalho do Painel */
+.cabecalho-painel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--background);
+    border-radius: 12px 12px 0 0;
+}
+
+.cabecalho-painel h4 {
+    margin: 0;
+    color: var(--text);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-fechar-painel {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.btn-fechar-painel:hover {
+    background: var(--background);
+    color: var(--text);
+}
+
+/* Controles */
+.controles-voz {
+    padding: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.controle-grupo {
+    margin-bottom: 20px;
+}
+
+.controle-grupo label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text);
+    font-size: 14px;
+}
+
+.controle-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    font-size: 14px;
+}
+
+.controle-select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.controle-range-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.controle-range {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+    outline: none;
+    -webkit-appearance: none;
+}
+/* js/auth.css - Estilos do Sistema de Autenticação */
+
+/* Estados de usuário */
+.user-aluno {
+    --user-color: var(--primary);
+    --user-badge: 'Aluno';
+}
+
+.user-professor {
+    --user-color: var(--warning);
+    --user-badge: 'Professor';
+}
+
+.user-admin {
+    --user-color: var(--danger);
+    --user-badge: 'Administrador';
+}
+
+/* Badge de tipo de usuário */
+.user-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background: var(--user-color);
+    color: white;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+/* Loading durante autenticação */
+.auth-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: var(--text-secondary);
+}
+
+.auth-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top: 3px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+/* Estados de formulário */
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea {
+    border-color: var(--danger) !important;
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.form-error {
+    color: var(--danger);
+    font-size: 12px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.form-success {
+    color: var(--success);
+    font-size: 12px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Animações de transição de tela */
+.screen-transition {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Botões de ação de auth */
+.auth-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.btn-login {
+    background: var(--primary);
+    color: white;
+    flex: 1;
+}
+
+.btn-register {
+    background: var(--success);
+    color: white;
+    flex: 1;
+}
+
+.btn-logout {
+    background: var(--danger);
+    color: white;
+}
+
+/* Header de usuário logado */
+.user-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    background: var(--background);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-name {
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+}
+
+.user-email {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Modal de sessão expirando */
+.session-warning {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--warning);
+    color: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow);
+    z-index: 10002;
+    animation: slideInRight 0.3s ease;
+}
+
+.session-warning p {
+    margin: 0 0 12px 0;
+}
+
+.session-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .auth-actions {
+        flex-direction: column;
+    }
+    
+    .user-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+}
+
+/* Estados de foco para acessibilidade */
+.login-form:focus-within,
+.register-form:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+/* Feedback visual para campos válidos/inválidos */
+input:valid {
+    border-color: var(--success);
+}
+
+input:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: var(--danger);
+}
+
+/* Animações de entrada para elementos de auth */
+.auth-card {
+    animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estados de hover e active */
+.btn-login:hover,
+.btn-register:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.btn-login:active,
+.btn-register:active {
+    transform: translateY(0);
+}
+
+/* Modo escuro ajustes */
+.dark-mode .user-header {
+    background: var(--surface);
+}
+
+.dark-mode .form-group.error input {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.controle-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    border: 2px solid var(--surface);
+    box-shadow: 0 2px 4px var(--shadow);
+}
+
+.controle-range::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    border: 2px solid var(--surface);
+    box-shadow: 0 2px 4px var(--shadow);
+}
+
+.valor-range {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    min-width: 40px;
+    text-align: right;
+}
+
+/* Botões de Ação */
+.botoes-acao {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 20px 0;
+}
+
+.btn-pequeno {
+    padding: 8px 12px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* Checkbox Personalizado */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text);
+}
+
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+    content: '✓';
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Estatísticas */
+.estatisticas-voz {
+    padding: 12px;
+    background: var(--background);
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.estatistica-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.estatistica-item strong {
+    color: var(--text);
+}
+
+/* Status */
+.status-ativo {
+    color: var(--success);
+    font-weight: bold;
+}
+
+.status-inativo {
+    color: var(--text-secondary);
+}
+
+.status-falando {
+    color: var(--primary);
+    animation: blink 1s infinite;
+}
+
+.status-parado {
+    color: var(--danger);
+}
+
+.status-pausado {
+    color: var(--warning);
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Feedback */
+.feedback-voz {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow);
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 300px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+
+.feedback-voz.show {
+    transform: translateX(0);
+}
+
+.feedback-success {
+    background: var(--success);
+    color: white;
+    border-left: 4px solid var(--success);
+}
+
+.feedback-error {
+    background: var(--danger);
+    color: white;
+    border-left: 4px solid var(--danger);
+}
+
+.feedback-warning {
+    background: var(--warning);
+    color: white;
+    border-left: 4px solid var(--warning);
+}
+
+.feedback-info {
+    background: var(--primary);
+    color: white;
+    border-left: 4px solid var(--primary);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .sistema-voz-container {
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .botao-voz-principal {
+        width: 50px;
+        height: 50px;
+    }
+
+    .painel-controle-voz {
+        width: 280px;
+        right: -10px;
+    }
+
+    .controles-voz {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .painel-controle-voz {
+        width: calc(100vw - 40px);
+        right: 10px;
+    }
+}
+
+/* Modo Escuro */
+.dark-mode .painel-controle-voz {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+.dark-mode .controle-select,
+.dark-mode .controle-range {
+    background: var(--background);
+}
+
+.dark-mode .estatisticas-voz {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Animações de Entrada */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Estados de Foco para Acessibilidade */
+.botao-voz-principal:focus-visible,
+.controle-select:focus-visible,
+.controle-range:focus-visible,
+.btn-fechar-painel:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Loading States */
+.botao-voz-principal.carregando {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.botao-voz-principal.carregando .icone-voz {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.activity-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Estados especiais */
+.activity-item.concluida {
+    background: var(--background);
+    border-left: 4px solid var(--success);
+    opacity: 0.8;
+}
+
+.activity-item.concluida .activity-title {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+
+.activity-item.prioridade-alta {
+    border-left: 4px solid var(--danger);
+    background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, transparent 100%);
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--surface);
+    padding: 24px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    border: 1px solid var(--border);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+/* Feedback */
+.feedback-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--surface);
+    color: var(--text);
+    padding: 16px 20px;
+    border-radius: 8px;
+    border: 2px solid var(--success);
+    box-shadow: 0 4px 12px var(--shadow);
+    z-index: 10000;
+    animation: slideInRight 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 300px;
+}
+
+/* Ícones */
+.success-icon {
+    color: var(--success);
+    font-size: 0.8em;
+}
+
+.warning-icon {
+    color: var(--warning);
+    font-size: 0.8em;
+}
+
+/* Ajuda de formulário */
+.form-help {
+    color: var(--text-secondary);
+    margin-top: 5px;
+    display: block;
+    font-size: 0.85em;
+}
+
+.btn-outline-primary {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn-outline-danger {
+    background: transparent;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+}
+/* Botão de acessibilidade */
+#botao-acessibilidade {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 12px var(--shadow);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#botao-acessibilidade:hover {
+    transform: scale(1.1);
+}
+
+#botao-acessibilidade.ativo {
+    background: var(--success);
+}

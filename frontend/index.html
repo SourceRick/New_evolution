@@ -1,11 +1,36 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <script>
+// Definição emergencial da função showTab
+function showTab(tabName) {
+    console.log('🔧 showTab chamada (versão emergencial):', tabName);
+    
+    // Esconde todas as abas
+    const tabs = document.querySelectorAll('.tab-content > div');
+    tabs.forEach(tab => tab.classList.add('hidden'));
+    
+    // Remove active de todos os botões
+    const buttons = document.querySelectorAll('.nav-tab');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    // Mostra aba selecionada
+    const targetTab = document.getElementById(tabName + '-tab');
+    if (targetTab) targetTab.classList.remove('hidden');
+    
+    // Ativa botão clicado
+    event.currentTarget.classList.add('active');
+}
+
+// Tornar global
+window.showTab = showTab;
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ByteWave - Sistema de Atividades</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* CSS completo do sistema (incluindo todos os estilos dos módulos) */
         :root {
             /* Cores modo diurno */
             --primary: #2563eb;
@@ -13,6 +38,7 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --info: #3b82f6;
             --background: #f8fafc;
             --surface: #ffffff;
             --text: #1e293b;
@@ -28,6 +54,7 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --info: #60a5fa;
             --background: #0f172a;
             --surface: #1e293b;
             --text: #f1f5f9;
@@ -48,6 +75,7 @@
             color: var(--text);
             min-height: 100vh;
             transition: all 0.3s ease;
+            line-height: 1.6;
         }
 
         .container {
@@ -68,6 +96,11 @@
             transition: all 0.3s ease;
         }
 
+        .card:hover {
+            box-shadow: 0 8px 25px var(--shadow);
+            transform: translateY(-2px);
+        }
+
         /* Botões */
         .btn {
             padding: 12px 24px;
@@ -79,6 +112,14 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
         .btn-primary {
@@ -86,7 +127,7 @@
             color: white;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             background: #1d4ed8;
             transform: translateY(-2px);
         }
@@ -96,9 +137,46 @@
             color: white;
         }
 
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
         .btn-danger {
             background: var(--danger);
             color: white;
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-outline-primary {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline-danger {
+            background: transparent;
+            border: 2px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        .btn-lg {
+            padding: 16px 32px;
+            font-size: 16px;
         }
 
         /* Formulários */
@@ -120,6 +198,24 @@
         .form-control:focus {
             outline: none;
             border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-control.error {
+            border-color: var(--danger);
+        }
+
+        .form-control.valid {
+            border-color: var(--success);
+        }
+
+        .field-error {
+            color: var(--danger);
+            font-size: 12px;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         /* Navegação */
@@ -160,12 +256,24 @@
             text-align: center;
         }
 
+        .text-left {
+            text-align: left;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
         .mb-3 {
             margin-bottom: 16px;
         }
 
         .mt-3 {
             margin-top: 16px;
+        }
+
+        .p-3 {
+            padding: 16px;
         }
 
         /* Posts e Atividades */
@@ -184,16 +292,96 @@
         }
 
         .activity-item {
-            background: var(--background);
+            background: var(--surface);
             border-left: 4px solid var(--primary);
             padding: 20px;
             margin-bottom: 16px;
             border-radius: 8px;
             transition: all 0.3s ease;
+            border: 1px solid var(--border);
         }
 
         .activity-item:hover {
             transform: translateX(4px);
+        }
+
+        .activity-item.concluida {
+            background: var(--background);
+            border-left: 4px solid var(--success);
+            opacity: 0.8;
+        }
+        
+        .activity-item.concluida .activity-title {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .activity-item.prioridade-alta {
+            border-left: 4px solid var(--danger);
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, transparent 100%);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .activity-title-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .activity-title {
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .activity-description {
+            margin: 0;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .activity-status-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+        }
+
+        .activity-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .activity-info {
+            font-size: 14px;
+            color: var(--text-secondary);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .activity-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         /* Header */
@@ -204,6 +392,8 @@
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 2px solid var(--border);
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
         .logo {
@@ -219,6 +409,44 @@
             display: flex;
             align-items: center;
             gap: 16px;
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            background: var(--background);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text);
+            margin: 0;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin: 0;
         }
 
         /* Toggle de tema */
@@ -242,6 +470,9 @@
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .badge-primary {
@@ -261,6 +492,11 @@
 
         .badge-danger {
             background: var(--danger);
+            color: white;
+        }
+
+        .badge-secondary {
+            background: var(--secondary);
             color: white;
         }
 
@@ -284,57 +520,6 @@
         .course-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 25px var(--shadow);
-        }
-
-        /* Responsivo */
-        @media (max-width: 768px) {
-            .container {
-                padding: 16px;
-            }
-
-            .nav-tabs {
-                flex-direction: column;
-            }
-
-            .nav-tab {
-                padding: 12px 16px;
-            }
-
-            .app-header {
-                flex-direction: column;
-                gap: 16px;
-                text-align: center;
-            }
-
-            .courses-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Animações */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease;
-        }
-
-        /* Loading */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid var(--border);
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         /* Dashboard Grid */
@@ -366,13 +551,332 @@
             font-size: 0.9em;
         }
 
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .auth-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .auth-loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid var(--border);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-sm {
+            max-width: 400px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        /* Notificações */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--shadow);
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 400px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-success {
+            background: var(--success);
+            color: white;
+            border-left: 4px solid var(--success);
+        }
+
+        .notification-error {
+            background: var(--danger);
+            color: white;
+            border-left: 4px solid var(--danger);
+        }
+
+        .notification-warning {
+            background: var(--warning);
+            color: white;
+            border-left: 4px solid var(--warning);
+        }
+
+        .notification-info {
+            background: var(--info);
+            color: white;
+            border-left: 4px solid var(--info);
+        }
+
+        .notification-loading {
+            background: var(--primary);
+            color: white;
+            border-left: 4px solid var(--primary);
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            padding: 4px;
+            margin-left: auto;
+        }
+
+        /* Sistema de Voz */
+        .sistema-voz-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .botao-voz-principal {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            box-shadow: 0 4px 12px var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .botao-voz-principal:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px var(--shadow);
+        }
+
+        .botao-voz-principal.ativo {
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        .painel-controle-voz {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 320px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px var(--shadow);
+            padding: 0;
+            animation: slideUp 0.3s ease;
+        }
+
+        .painel-controle-voz.hidden {
+            display: none;
+        }
+
+        /* Estados de usuário */
+        .user-aluno {
+            --user-color: var(--primary);
+        }
+
+        .user-professor {
+            --user-color: var(--warning);
+        }
+
+        .user-admin {
+            --user-color: var(--danger);
+        }
+
+        .user-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: var(--user-color);
+            color: white;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Responsivo */
         @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .nav-tab {
+                padding: 12px 16px;
+            }
+
+            .app-header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
             
             .stat-number {
                 font-size: 2em;
+            }
+
+            .activity-details {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .activity-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .user-menu {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .sistema-voz-container {
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .botao-voz-principal {
+                width: 50px;
+                height: 50px;
+            }
+
+            .painel-controle-voz {
+                width: 280px;
+                right: -10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .painel-controle-voz {
+                width: calc(100vw - 40px);
+                right: 10px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 16px;
             }
         }
     </style>
@@ -479,7 +983,15 @@
                     <button class="theme-toggle" onclick="toggleTheme()">
                         <i class="fas fa-moon" id="theme-icon"></i>
                     </button>
-                    <span id="user-name">Usuário</span>
+                    <div class="user-header">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name" id="user-name">Usuário</div>
+                            <div class="user-email" id="user-email">user@email.com</div>
+                        </div>
+                    </div>
                     <button onclick="logout()" class="btn btn-danger">
                         <i class="fas fa-sign-out-alt"></i>
                         Sair
@@ -489,52 +1001,38 @@
 
             <!-- Menu de Navegação -->
             <div class="nav-tabs">
-                <div class="nav-tab active" onclick="showTab('inicio')">
-                    <i class="fas fa-home"></i>
-                    Início
-                </div>
-                <div class="nav-tab" onclick="showTab('cursos')">
-                    <i class="fas fa-book"></i>
-                    Cursos
-                </div>
-                <div class="nav-tab" onclick="showTab('atividades')">
-                    <i class="fas fa-tasks"></i>
-                    Atividades
-                </div>
-                <div class="nav-tab" onclick="showTab('trabalhos')">
-                    <i class="fas fa-file-alt"></i>
-                    Trabalhos
-                </div>
-                <div class="nav-tab" onclick="showTab('rede-social')">
-                    <i class="fas fa-users"></i>
-                    Rede Social
-                </div>
-                <div id="professor-tab" class="nav-tab hidden" onclick="showTab('criar-atividade')">
-                    <i class="fas fa-plus"></i>
-                    Nova Atividade
-                </div>
-            </div>
-
+    <div class="nav-tab active" onclick="showTab('inicio')">
+        <i class="fas fa-home"></i>
+        Início
+    </div>
+    <div class="nav-tab" onclick="showTab('cursos')">
+        <i class="fas fa-book"></i>
+        Cursos
+    </div>
+    <div class="nav-tab" onclick="showTab('atividades')">
+        <i class="fas fa-tasks"></i>
+        Atividades
+    </div>
+    <div class="nav-tab" onclick="showTab('trabalhos')">
+        <i class="fas fa-file-alt"></i>
+        Trabalhos
+    </div>
+    <div class="nav-tab" onclick="showTab('rede-social')">
+        <i class="fas fa-users"></i>
+        Rede Social
+    </div>
+    <div id="professor-tab" class="nav-tab hidden" onclick="showTab('criar-atividade')">
+        <i class="fas fa-plus"></i>
+        Nova Atividade
+    </div>
+</div>
             <!-- Conteúdo das Abas -->
             <div class="tab-content">
                 <!-- Aba Início -->
                 <div id="inicio-tab" class="fade-in">
                     <h2><i class="fas fa-graduation-cap"></i> Painel do Aluno</h2>
-                    
-                    <div class="card mt-3">
-                        <h3><i class="fas fa-bell"></i> Próximos Trabalhos</h3>
-                        <div class="activity-item">
-                            <h4><i class="fas fa-code"></i> Programação</h4>
-                            <p>Entrega: 12 de março</p>
-                            <span class="badge badge-warning">Pendente</span>
-                        </div>
-                    </div>
-
-                    <div class="card mt-3">
-                        <h3><i class="fas fa-list-alt"></i> Atividades Recentes</h3>
-                        <div id="atividades-recentes">
-                            <!-- Atividades serão carregadas aqui -->
-                        </div>
+                    <div id="dashboard-content">
+                        <!-- Conteúdo do dashboard será carregado dinamicamente -->
                     </div>
                 </div>
 
@@ -583,6 +1081,16 @@
                             <textarea id="activity-descricao" class="form-control" placeholder="Descreva a atividade..." rows="4"></textarea>
                         </div>
                         <div class="form-group">
+                            <label>Tipo de Atividade</label>
+                            <select id="activity-tipo" class="form-control">
+                                <option value="trabalho">Trabalho</option>
+                                <option value="prova">Prova</option>
+                                <option value="projeto">Projeto</option>
+                                <option value="exercicio">Exercício</option>
+                                <option value="questionario">Questionário</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label>Data de Entrega</label>
                             <input type="datetime-local" id="activity-data-entrega" class="form-control">
                         </div>
@@ -590,1070 +1098,41 @@
                             <label>Valor Máximo</label>
                             <input type="number" id="activity-valor" class="form-control" value="10.00" step="0.01">
                         </div>
-                        <button onclick="criarAtividade()" class="btn btn-primary">
-                            <i class="fas fa-plus"></i>
-                            Criar Atividade
-                        </button>
+                        <button id="btn-criar-atividade" class="btn btn-primary">
+    <i class="fas fa-plus"></i>
+    Criar Atividade
+</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Configurações
-        const API_BASE = 'http://localhost:3000/api';
-        let currentUser = null;
-        let token = localStorage.getItem('token');
-        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/atividades.js"></script> <!-- atividadesService é criado aqui -->
+<script src="js/main.js"></script>
+<script src="js/voz.js"></script>
+    
 
-        // Inicialização
+    <script>
+        // Inicialização final
         document.addEventListener('DOMContentLoaded', function() {
-            applyTheme();
+            console.log('🎉 ByteWave completamente carregado!');
+            
+            // Verificar autenticação inicial
             if (token) {
                 checkAuth();
             }
-        });
-
-        // Sistema de Tema
-        function toggleTheme() {
-            isDarkMode = !isDarkMode;
-            localStorage.setItem('darkMode', isDarkMode);
-            applyTheme();
-        }
-
-        function applyTheme() {
+            
+            // Aplicar tema salvo
             if (isDarkMode) {
                 document.body.classList.add('dark-mode');
-                document.getElementById('theme-icon').className = 'fas fa-sun';
-            } else {
-                document.body.classList.remove('dark-mode');
-                document.getElementById('theme-icon').className = 'fas fa-moon';
+                const themeIcon = document.getElementById('theme-icon');
+                if (themeIcon) themeIcon.className = 'fas fa-sun';
             }
-        }
-
-        // Autenticação
-        async function checkAuth() {
-            try {
-                const payload = JSON.parse(atob(token.split('.')[1]));
-                currentUser = payload;
-                showDashboard();
-                loadUserData();
-            } catch (error) {
-                localStorage.removeItem('token');
-                showLogin();
-            }
-        }
-
-        async function login() {
-            const email = document.getElementById('login-email').value;
-            const senha = document.getElementById('login-senha').value;
-
-            try {
-                const response = await fetch(`${API_BASE}/auth/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, senha })
-                });
-
-                const data = await response.json();
-
-                if (response.ok && data.success) {
-                    // Mostrar tela de acessibilidade antes do dashboard
-                    showAccessibilityScreen();
-                    token = data.data.token;
-                    localStorage.setItem('token', token);
-                    currentUser = data.data.user;
-                } else {
-                    showError(data.error || 'Erro no login');
-                }
-            } catch (error) {
-                showError('Erro ao fazer login');
-            }
-        }
-
-        function showAccessibilityScreen() {
-            hideAllScreens();
-            document.getElementById('accessibility-screen').classList.remove('hidden');
-        }
-
-        function setAccessibility(access) {
-            if (access) {
-                // Aqui iriam as configurações de acessibilidade
-                console.log('Acessibilidade ativada');
-            }
-            showDashboard();
-            loadUserData();
-        }
-
-        // Funções de navegação entre telas
-        function showRegister() {
-            hideAllScreens();
-            document.getElementById('register-screen').classList.remove('hidden');
-        }
-
-        function showLogin() {
-            hideAllScreens();
-            document.getElementById('login-screen').classList.remove('hidden');
-        }
-
-        function showDashboard() {
-            hideAllScreens();
-            document.getElementById('dashboard').classList.remove('hidden');
-        }
-
-        function hideAllScreens() {
-            const screens = ['login-screen', 'accessibility-screen', 'dashboard', 'register-screen'];
-            screens.forEach(screen => {
-                const element = document.getElementById(screen);
-                if (element) {
-                    element.classList.add('hidden');
-                }
-            });
-        }
-
-        // Navegação entre abas
-        function showTab(tabName) {
-            // PROTEÇÃO: Impedir alunos de acessarem aba de criar atividade
-            if (tabName === 'criar-atividade' && currentUser && currentUser.tipo !== 'professor' && currentUser.tipo !== 'admin') {
-                showError('❌ Acesso restrito a professores');
-                showTab('inicio');
-                return;
-            }
-            
-            // Esconder todas as abas
-            document.querySelectorAll('.tab-content > div').forEach(tab => {
-                tab.classList.add('hidden');
-            });
-            
-            // Remover active de todas as tabs
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Mostrar aba selecionada
-            const targetTab = document.getElementById(`${tabName}-tab`);
-            if (targetTab) {
-                targetTab.classList.remove('hidden');
-            }
-            
-            // Adicionar active na tab clicada
-            event.target.classList.add('active');
-
-            // Carregar dados específicos da aba
-            switch(tabName) {
-                case 'inicio':
-                    loadDashboard();
-                    break;
-                case 'cursos':
-                    loadCursos();
-                    break;
-                case 'atividades':
-                    loadAtividades();
-                    break;
-                case 'trabalhos':
-                    loadTrabalhos();
-                    break;
-                case 'rede-social':
-                    loadPostsSociais();
-                    break;
-            }
-        }
-
-        // Carregar dados do usuário
-        function loadUserData() {
-            if (!currentUser) return;
-
-            document.getElementById('user-name').textContent = currentUser.nome;
-            
-            // MOSTRAR ABA DE PROFESSOR APENAS PARA PROFESSORES/ADMIN
-            if (currentUser.tipo === 'professor' || currentUser.tipo === 'admin') {
-                document.getElementById('professor-tab').classList.remove('hidden');
-            } else {
-                document.getElementById('professor-tab').classList.add('hidden');
-            }
-
-            loadDashboardData();
-        }
-
-        // Carregar dados do dashboard
-        function loadDashboardData() {
-            // Dados mock para exemplo
-            const atividadesHTML = `
-                <div class="activity-item">
-                    <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Avaliação - Trabalho 1</h4>
-                    <p>Status: <span class="badge badge-success">Entregue</span></p>
-                </div>
-                <div class="activity-item">
-                    <h4><i class="fas fa-comments" style="color: var(--warning);"></i> Fórum - Discussão sobre projeto</h4>
-                    <p>Status: <span class="badge badge-warning">Em andamento</span></p>
-                </div>
-                <div class="activity-item">
-                    <h4><i class="fas fa-book" style="color: var(--primary);"></i> Livro - Leitura de capítulo 4</h4>
-                    <p>Status: <span class="badge badge-success">Concluída</span></p>
-                </div>
-            `;
-            document.getElementById('atividades-recentes').innerHTML = atividadesHTML;
-        }
-
-        // Carregar cursos
-        function loadCursos() {
-            const cursosHTML = `
-                <div class="course-card" onclick="showCursoDetalhes('desenvolvimento-sistemas')">
-                    <h3><i class="fas fa-laptop-code"></i> Desenvolvimento de Sistemas</h3>
-                    <p>Curso de programação e desenvolvimento web</p>
-                    <div class="badge badge-primary">Sala 1</div>
-                </div>
-                <div class="course-card" onclick="showCursoDetalhes('mecatronica')">
-                    <h3><i class="fas fa-robot"></i> Mecatrônica</h3>
-                    <p>Automação e robótica industrial</p>
-                    <div class="badge badge-primary">Sala 2</div>
-                </div>
-            `;
-            document.getElementById('cursos-list').innerHTML = cursosHTML;
-        }
-
-        function showCursoDetalhes(curso) {
-            alert(`Detalhes do curso: ${curso}`);
-            // Aqui você pode implementar a navegação para detalhes do curso
-        }
-
-        async function register() {
-            const nome = document.getElementById('register-nome').value;
-            const email = document.getElementById('register-email').value;
-            const senha = document.getElementById('register-senha').value;
-            const tipo = document.getElementById('register-tipo').value;
-
-            // Validação básica
-            if (!nome || !email || !senha) {
-                showError('Preencha todos os campos');
-                return;
-            }
-
-            if (senha.length < 6) {
-                showError('A senha deve ter pelo menos 6 caracteres');
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE}/auth/register`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        nome, 
-                        email, 
-                        senha, 
-                        tipo 
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok && data.success) {
-                    showSuccess('Cadastro realizado com sucesso!');
-                    
-                    // Preencher automaticamente o login
-                    document.getElementById('login-email').value = email;
-                    document.getElementById('login-senha').value = senha;
-                    
-                    // Voltar para tela de login
-                    showLogin();
-                    
-                } else {
-                    showError(data.error || 'Erro no cadastro');
-                }
-
-            } catch (error) {
-                console.error('Erro no cadastro:', error);
-                showError('Erro de conexão. Verifique se o backend está rodando.');
-            }
-        }
-
-        // Carregar dashboard específico
-        async function loadDashboard() {
-            try {
-                const endpoint = currentUser.tipo === 'professor' ? '/dashboard/professor' : '/dashboard/aluno';
-                const response = await fetch(`${API_BASE}${endpoint}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success) {
-                        renderDashboard(data.data);
-                    } else {
-                        renderMockDashboard();
-                    }
-                } else {
-                    renderMockDashboard();
-                }
-            } catch (error) {
-                renderMockDashboard();
-            }
-        }
-
-        function renderDashboard(data) {
-            const dashboardHTML = currentUser.tipo === 'professor' 
-                ? renderProfessorDashboard(data)
-                : renderAlunoDashboard(data);
-            
-            document.getElementById('inicio-tab').innerHTML = `
-                <h2><i class="fas fa-graduation-cap"></i> Painel do ${currentUser.tipo === 'professor' ? 'Professor' : 'Aluno'}</h2>
-                ${dashboardHTML}
-            `;
-        }
-
-        function renderProfessorDashboard(data) {
-            return `
-                <div class="dashboard-grid">
-                    <div class="stats-grid">
-                        <div class="stat-card card">
-                            <i class="fas fa-tasks" style="font-size: 2em; color: var(--primary);"></i>
-                            <div class="stat-number">${data.total_atividades}</div>
-                            <div class="stat-label">Atividades Criadas</div>
-                        </div>
-                        <div class="stat-card card">
-                            <i class="fas fa-file-alt" style="font-size: 2em; color: var(--success);"></i>
-                            <div class="stat-number">${data.total_trabalhos}</div>
-                            <div class="stat-label">Trabalhos Entregues</div>
-                        </div>
-                        <div class="stat-card card">
-                            <i class="fas fa-clock" style="font-size: 2em; color: var(--warning);"></i>
-                            <div class="stat-number">${data.trabalhos_pendentes}</div>
-                            <div class="stat-label">Avaliações Pendentes</div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <h3><i class="fas fa-bell"></i> Atividades Recentes</h3>
-                        ${data.atividades_recentes.map(atividade => `
-                            <div class="activity-item">
-                                <h4>${atividade.titulo}</h4>
-                                <p>${atividade.descricao}</p>
-                                <small>Entrega: ${new Date(atividade.data_entrega).toLocaleDateString()}</small>
-                            </div>
-                        `).join('')}
-                    </div>
-
-                    <div class="card">
-                        <h3><i class="fas fa-history"></i> Trabalhos Recentes</h3>
-                        ${data.trabalhos_recentes.map(trabalho => `
-                            <div class="activity-item">
-                                <h4>${trabalho.titulo}</h4>
-                                <p>Aluno: ${trabalho.aluno_nome}</p>
-                                <p>Status: <span class="badge ${trabalho.nota ? 'badge-success' : 'badge-warning'}">
-                                    ${trabalho.nota ? `Avaliado: ${trabalho.nota}` : 'Pendente'}
-                                </span></p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderAlunoDashboard(data) {
-            return `
-                <div class="dashboard-grid">
-                    <div class="stats-grid">
-                        <div class="stat-card card">
-                            <i class="fas fa-tasks" style="font-size: 2em; color: var(--primary);"></i>
-                            <div class="stat-number">${data.total_atividades}</div>
-                            <div class="stat-label">Total de Atividades</div>
-                        </div>
-                        <div class="stat-card card">
-                            <i class="fas fa-check-circle" style="font-size: 2em; color: var(--success);"></i>
-                            <div class="stat-number">${data.atividades_entregues}</div>
-                            <div class="stat-label">Entregues</div>
-                        </div>
-                        <div class="stat-card card">
-                            <i class="fas fa-clock" style="font-size: 2em; color: var(--warning);"></i>
-                            <div class="stat-number">${data.atividades_pendentes}</div>
-                            <div class="stat-label">Pendentes</div>
-                        </div>
-                        <div class="stat-card card">
-                            <i class="fas fa-star" style="font-size: 2em; color: var(--success);"></i>
-                            <div class="stat-number">${data.media_notas.toFixed(1)}</div>
-                            <div class="stat-label">Média</div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <h3><i class="fas fa-bell"></i> Trabalhos Recentes</h3>
-                        ${data.trabalhos_recentes.map(trabalho => `
-                            <div class="activity-item">
-                                <h4>${trabalho.titulo}</h4>
-                                <p>Status: <span class="badge ${trabalho.nota ? 'badge-success' : 'badge-warning'}">
-                                    ${trabalho.nota ? `Nota: ${trabalho.nota}` : 'Aguardando avaliação'}
-                                </span></p>
-                                <small>Entregue em: ${new Date(trabalho.data_entrega).toLocaleDateString()}</small>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-
-        // Dashboard mock para quando a API não estiver disponível
-        function renderMockDashboard() {
-            if (currentUser.tipo === 'professor') {
-                renderProfessorDashboard({
-                    total_atividades: 3,
-                    total_trabalhos: 8,
-                    trabalhos_pendentes: 2,
-                    atividades_recentes: [
-                        {
-                            titulo: 'Trabalho de Programação Web',
-                            descricao: 'Site responsivo com HTML/CSS/JS',
-                            data_entrega: '2025-11-06T23:59:00'
-                        },
-                        {
-                            titulo: 'Prova Banco de Dados', 
-                            descricao: 'Prova teórica sobre SQL',
-                            data_entrega: '2025-11-25T14:00:00'
-                        }
-                    ],
-                    trabalhos_recentes: [
-                        {
-                            titulo: 'Site Pessoal',
-                            aluno_nome: 'Aluno João',
-                            nota: 9.5
-                        },
-                        {
-                            titulo: 'Exercícios Algoritmos',
-                            aluno_nome: 'Aluna Maria', 
-                            nota: null
-                        }
-                    ]
-                });
-            } else {
-                renderAlunoDashboard({
-                    total_atividades: 4,
-                    atividades_entregues: 2,
-                    atividades_pendentes: 2,
-                    media_notas: 8.5,
-                    trabalhos_recentes: [
-                        {
-                            titulo: 'Meu Site Pessoal',
-                            nota: 9.5,
-                            data_entrega: '2025-11-13T14:30:00'
-                        },
-                        {
-                            titulo: 'Exercícios Algoritmos',
-                            nota: null,
-                            data_entrega: '2025-11-24T10:00:00'
-                        }
-                    ]
-                });
-            }
-        }
-
-        // Carregar atividades
-        async function loadAtividades() {
-            try {
-                // Mostrar loading
-                document.getElementById('atividades-list').innerHTML = `
-                    <div class="text-center" style="color: var(--text-secondary);">
-                        <div class="loading" style="margin: 20px auto;"></div>
-                        <br>Carregando atividades...
-                    </div>
-                `;
-
-                const response = await fetch(`${API_BASE}/atividades`, {
-                    headers: { 
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                // Se a API responder com sucesso
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success && data.data) {
-                        renderAtividades(data.data);
-                    } else {
-                        // Se a API responder mas sem dados, usar dados mock
-                        useMockAtividades();
-                    }
-                } else {
-                    // Se a API não responder, usar dados mock
-                    useMockAtividades();
-                }
-
-            } catch (error) {
-                console.log('API não disponível, usando dados de exemplo:', error);
-                useMockAtividades();
-            }
-        }
-
-        // Dados mock para quando a API não estiver disponível
-        function useMockAtividades() {
-            const mockAtividades = [
-                {
-                    id: 1,
-                    titulo: 'Trabalho de Programação Web',
-                    descricao: 'Desenvolver um site responsivo usando HTML, CSS e JavaScript. O tema é livre, mas deve conter pelo menos 3 páginas.',
-                    data_entrega: '2025-11-15T23:59:00',
-                    professor_nome: 'Prof. Silva',
-                    valor_maximo: 10.00,
-                    tipo: 'trabalho'
-                },
-                {
-                    id: 2,
-                    titulo: 'Prova de Banco de Dados',
-                    descricao: 'Prova teórica sobre modelagem ER, normalização e comandos SQL avançados.',
-                    data_entrega: '2025-11-21T14:00:00', 
-                    professor_nome: 'Prof. Santos',
-                    valor_maximo: 8.00,
-                    tipo: 'prova'
-                },
-                {
-                    id: 3,
-                    titulo: 'Projeto de Sistema Acadêmico',
-                    descricao: 'Em grupo, desenvolver um sistema completo de gestão acadêmica com cadastro de alunos, professores e disciplinas.',
-                    data_entrega: '2025-11-19T23:59:00',
-                    professor_nome: 'Prof. Oliveira',
-                    valor_maximo: 15.00,
-                    tipo: 'projeto'
-                },
-                {
-                    id: 4,
-                    titulo: 'Exercícios de Algoritmos',
-                    descricao: 'Lista de exercícios sobre estruturas de repetição e condicionais. Entregar em papel.',
-                    data_entrega: '2025-11-08T12:00:00',
-                    professor_nome: 'Prof. Costa',
-                    valor_maximo: 5.00,
-                    tipo: 'exercicio'
-                }
-            ];
-            
-            renderAtividades(mockAtividades);
-        }
-
-        function renderAtividades(atividades) {
-            const list = document.getElementById('atividades-list');
-            
-            if (!atividades || atividades.length === 0) {
-                list.innerHTML = `
-                    <div class="text-center" style="color: var(--text-secondary); padding: 40px;">
-                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 16px;"></i>
-                        <br>
-                        <h3>Nenhuma atividade pendente</h3>
-                        <p>Quando houver novas atividades, elas aparecerão aqui.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            list.innerHTML = atividades.map(atividade => {
-                const dataEntrega = new Date(atividade.data_entrega);
-                const agora = new Date();
-                const diasRestantes = Math.ceil((dataEntrega - agora) / (1000 * 60 * 60 * 24));
-                
-                let status = '';
-                let statusClass = '';
-                
-                if (diasRestantes < 0) {
-                    status = 'Atrasada';
-                    statusClass = 'badge-danger';
-                } else if (diasRestantes === 0) {
-                    status = 'Entrega hoje';
-                    statusClass = 'badge-warning';
-                } else if (diasRestantes <= 3) {
-                    status = `Entrega em ${diasRestantes} dia${diasRestantes > 1 ? 's' : ''}`;
-                    statusClass = 'badge-warning';
-                } else {
-                    status = `Entrega em ${diasRestantes} dias`;
-                    statusClass = 'badge-primary';
-                }
-
-                const tipoIcon = {
-                    'trabalho': 'fa-file-alt',
-                    'prova': 'fa-clipboard-check',
-                    'projeto': 'fa-project-diagram',
-                    'exercicio': 'fa-pencil-alt'
-                }[atividade.tipo] || 'fa-tasks';
-
-                return `
-                    <div class="activity-item">
-                        <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 12px;">
-                            <div style="flex: 1;">
-                                <h4 style="margin: 0 0 8px 0;">
-                                    <i class="fas ${tipoIcon}" style="color: var(--primary); margin-right: 8px;"></i>
-                                    ${atividade.titulo}
-                                </h4>
-                                <p style="margin: 0; color: var(--text-secondary);">${atividade.descricao || 'Sem descrição'}</p>
-                            </div>
-                            <span class="badge ${statusClass}">${status}</span>
-                        </div>
-                        
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; flex-wrap: wrap; gap: 12px;">
-                            <div style="font-size: 14px; color: var(--text-secondary);">
-                                <div><strong><i class="fas fa-user-graduate"></i> Professor:</strong> ${atividade.professor_nome}</div>
-                                <div><strong><i class="fas fa-clock"></i> Entrega:</strong> ${dataEntrega.toLocaleString('pt-BR')}</div>
-                                <div><strong><i class="fas fa-star"></i> Valor:</strong> ${atividade.valor_maximo} pontos</div>
-                            </div>
-                            <button onclick="entregarTrabalho(${atividade.id})" class="btn btn-primary">
-                                <i class="fas fa-paper-plane"></i>
-                                Entregar Trabalho
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Carregar trabalhos do usuário
-        async function loadTrabalhos() {
-            try {
-                document.getElementById('trabalhos-list').innerHTML = `
-                    <div class="text-center" style="color: var(--text-secondary);">
-                        <div class="loading" style="margin: 20px auto;"></div>
-                        <br>Carregando seus trabalhos...
-                    </div>
-                `;
-
-                const response = await fetch(`${API_BASE}/trabalhos`, {
-                    headers: { 
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success && data.data) {
-                        renderTrabalhos(data.data);
-                    } else {
-                        renderMockTrabalhos();
-                    }
-                } else {
-                    renderMockTrabalhos();
-                }
-            } catch (error) {
-                console.log('API não disponível, usando dados de exemplo');
-                renderMockTrabalhos();
-            }
-        }
-
-        function renderTrabalhos(trabalhos) {
-            const list = document.getElementById('trabalhos-list');
-            
-            if (!trabalhos || trabalhos.length === 0) {
-                list.innerHTML = `
-                    <div class="text-center" style="color: var(--text-secondary); padding: 40px;">
-                        <i class="fas fa-file-alt" style="font-size: 48px; margin-bottom: 16px;"></i>
-                        <br>
-                        <h3>Nenhum trabalho enviado</h3>
-                        <p>Seus trabalhos aparecerão aqui após a entrega.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            list.innerHTML = trabalhos.map(trabalho => {
-                const statusClass = trabalho.nota ? 'badge-success' : 'badge-warning';
-                const statusText = trabalho.nota ? `Avaliado: ${trabalho.nota}` : 'Aguardando avaliação';
-                
-                return `
-                    <div class="activity-item">
-                        <h4>${trabalho.titulo}</h4>
-                        <p>${trabalho.conteudo || 'Sem descrição'}</p>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; flex-wrap: wrap; gap: 12px;">
-                            <div style="font-size: 14px; color: var(--text-secondary);">
-                                <div><strong>Entregue em:</strong> ${new Date(trabalho.data_entrega).toLocaleString('pt-BR')}</div>
-                                <div><strong>Visibilidade:</strong> ${trabalho.visibilidade}</div>
-                            </div>
-                            <span class="badge ${statusClass}">${statusText}</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderMockTrabalhos() {
-            const mockTrabalhos = [
-                {
-                    id: 1,
-                    titulo: 'Meu Site Pessoal',
-                    conteudo: 'Desenvolvi um site pessoal com portfolio usando HTML, CSS e JavaScript',
-                    data_entrega: '2025-10-30T14:30:00',
-                    nota: 9.5,
-                    visibilidade: 'publico',
-                    status: 'avaliado'
-                },
-                {
-                    id: 2,
-                    titulo: 'Exercícios de Algoritmos',
-                    conteudo: 'Resolução dos exercícios propostos sobre estruturas de repetição',
-                    data_entrega: '2025-11-12T10:00:00',
-                    nota: null,
-                    visibilidade: 'privado',
-                    status: 'entregue'
-                }
-            ];
-            
-            renderTrabalhos(mockTrabalhos);
-        }
-
-        // Carregar posts da rede social
-        async function loadPostsSociais() {
-            try {
-                document.getElementById('posts-list').innerHTML = `
-                    <div class="text-center" style="color: var(--text-secondary);">
-                        <div class="loading" style="margin: 20px auto;"></div>
-                        <br>Carregando posts da comunidade...
-                    </div>
-                `;
-
-                const response = await fetch(`${API_BASE}/social/posts`, {
-                    headers: { 
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success && data.data) {
-                        renderPostsSociais(data.data);
-                    } else {
-                        renderMockPostsSociais();
-                    }
-                } else {
-                    renderMockPostsSociais();
-                }
-            } catch (error) {
-                console.log('API não disponível, usando dados de exemplo');
-                renderMockPostsSociais();
-            }
-        }
-
-        function renderPostsSociais(posts) {
-            const list = document.getElementById('posts-list');
-            
-            if (!posts || posts.length === 0) {
-                list.innerHTML = `
-                    <div class="text-center" style="color: var(--text-secondary); padding: 40px;">
-                        <i class="fas fa-users" style="font-size: 48px; margin-bottom: 16px;"></i>
-                        <br>
-                        <h3>Nenhum post público</h3>
-                        <p>Quando alunos compartilharem trabalhos públicos, eles aparecerão aqui.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            list.innerHTML = posts.map(post => {
-                return `
-                    <div class="post-card">
-                        <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                            <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
-                                <i class="fas fa-user" style="color: white;"></i>
-                            </div>
-                            <div>
-                                <strong>${post.autor_nome}</strong>
-                                <div style="font-size: 12px; color: var(--text-secondary);">
-                                    ${new Date(post.criado_em).toLocaleString('pt-BR')}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <h4 style="margin-bottom: 8px;">${post.titulo}</h4>
-                        <p style="margin-bottom: 16px; color: var(--text-secondary);">${post.conteudo}</p>
-                        
-                        <div style="display: flex; gap: 16px; margin-top: 12px; color: var(--text-secondary);">
-                            <button onclick="curtirPost(${post.id})" class="btn btn-sm" style="background: none; border: none; color: var(--text-secondary);">
-                                <i class="fas fa-heart"></i> ${post.total_curtidas} curtidas
-                            </button>
-                            <span>
-                                <i class="fas fa-comment"></i> ${post.total_comentarios} comentários
-                            </span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderMockPostsSociais() {
-            const mockPosts = [
-                {
-                    id: 1,
-                    titulo: 'Meu Site Pessoal - Feedback',
-                    conteudo: 'Gostaria de feedback no meu site pessoal que desenvolvi para a disciplina de Programação Web! Aceito sugestões para melhorar o design e acessibilidade.',
-                    autor_nome: 'Aluno João',
-                    total_curtidas: 5,
-                    total_comentarios: 3,
-                    criado_em: '2025-03-11T15:30:00'
-                },
-                {
-                    id: 2,
-                    titulo: 'Dúvida sobre SQL Avançado',
-                    conteudo: 'Alguém pode me ajudar com subqueries no MySQL? Estou com dificuldade em entender quando usar EXISTS vs IN.',
-                    autor_nome: 'Aluna Maria',
-                    total_curtidas: 2,
-                    total_comentarios: 5,
-                    criado_em: '2025-11-16T09:15:00'
-                }
-            ];
-            
-            renderPostsSociais(mockPosts);
-        }
-
-        // Função para curtir posts
-        async function curtirPost(postId) {
-            try {
-                const response = await fetch(`${API_BASE}/social/posts/${postId}/curtir`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    showSuccess('Post curtido!');
-                    loadPostsSociais(); // Recarregar posts
-                } else {
-                    showError('Erro ao curtir post');
-                }
-            } catch (error) {
-                console.log('API não disponível, simulando curtida');
-                showSuccess('Post curtido!');
-                // Em produção, você recarregaria os posts da API
-            }
-        }
-
-        // Entregar trabalho - Versão melhorada com modal
-        async function entregarTrabalho(idAtividade) {
-            // Encontrar a atividade nos dados mock
-            const atividades = await getAtividadesData();
-            const atividade = atividades.find(a => a.id === idAtividade);
-            
-            if (!atividade) {
-                showError('Atividade não encontrada');
-                return;
-            }
-
-            // Criar modal de entrega
-            const modalHTML = `
-                <div id="modal-overlay" style="
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0,0,0,0.5);
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    z-index: 1000;
-                ">
-                    <div style="
-                        background: var(--surface);
-                        padding: 24px;
-                        border-radius: 12px;
-                        width: 90%;
-                        max-width: 500px;
-                        border: 1px solid var(--border);
-                    ">
-                        <h3 style="margin-bottom: 16px;">
-                            <i class="fas fa-paper-plane"></i>
-                            Entregar Trabalho
-                        </h3>
-                        
-                        <div class="form-group">
-                            <label><strong>Atividade:</strong> ${atividade.titulo}</label>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Título do seu trabalho:</label>
-                            <input type="text" id="modal-titulo" class="form-control" placeholder="Ex: Meu Projeto de Programação">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Descrição/Conteúdo:</label>
-                            <textarea id="modal-conteudo" class="form-control" placeholder="Descreva seu trabalho..." rows="4"></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Visibilidade:</label>
-                            <select id="modal-visibilidade" class="form-control">
-                                <option value="privado">Privado (apenas professor)</option>
-                                <option value="turma">Turma (colegas da turma)</option>
-                                <option value="publico">Público (toda a comunidade)</option>
-                            </select>
-                        </div>
-                        
-                        <div style="display: flex; gap: 12px; margin-top: 20px;">
-                            <button onclick="fecharModal()" class="btn btn-secondary" style="flex: 1;">
-                                <i class="fas fa-times"></i>
-                                Cancelar
-                            </button>
-                            <button onclick="confirmarEntrega(${idAtividade})" class="btn btn-primary" style="flex: 1;">
-                                <i class="fas fa-check"></i>
-                                Confirmar Entrega
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
-        }
-
-        function fecharModal() {
-            const modal = document.getElementById('modal-overlay');
-            if (modal) modal.remove();
-        }
-
-        async function confirmarEntrega(idAtividade) {
-            const titulo = document.getElementById('modal-titulo').value;
-            const conteudo = document.getElementById('modal-conteudo').value;
-            const visibilidade = document.getElementById('modal-visibilidade').value;
-
-            if (!titulo.trim()) {
-                showError('Digite um título para seu trabalho');
-                return;
-            }
-
-            if (!conteudo.trim()) {
-                showError('Descreva o conteúdo do seu trabalho');
-                return;
-            }
-
-            try {
-                // Simular envio para API
-                console.log('Enviando trabalho:', { idAtividade, titulo, conteudo, visibilidade });
-                
-                // Mostrar loading
-                showSuccess('Enviando trabalho...');
-                
-                // Simular delay de rede
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                // Fechar modal
-                fecharModal();
-                
-                // Mostrar sucesso
-                showSuccess('🎉 Trabalho entregue com sucesso!');
-                
-                // Recarregar atividades (opcional)
-                // loadAtividades();
-                
-            } catch (error) {
-                showError('Erro ao entregar trabalho: ' + error.message);
-            }
-        }
-
-        // Função auxiliar para obter dados das atividades
-        async function getAtividadesData() {
-            return [
-                {
-                    id: 1,
-                    titulo: 'Trabalho de Programação Web',
-                    descricao: 'Desenvolver um site responsivo usando HTML, CSS e JavaScript',
-                    data_entrega: '2025-11-15T23:59:00',
-                    professor_nome: 'Prof. Silva',
-                    valor_maximo: 10.00,
-                    tipo: 'trabalho'
-                },
-                {
-                    id: 2,
-                    titulo: 'Prova de Banco de Dados',
-                    descricao: 'Prova teórica sobre modelagem e SQL',
-                    data_entrega: '2025-11-20T14:00:00', 
-                    professor_nome: 'Prof. Santos',
-                    valor_maximo: 8.00,
-                    tipo: 'prova'
-                },
-                {
-                    id: 3,
-                    titulo: 'Projeto de Sistema Acadêmico',
-                    descricao: 'Em grupo, desenvolver um sistema completo de gestão acadêmica',
-                    data_entrega: '2025-12-10T23:59:00',
-                    professor_nome: 'Prof. Oliveira',
-                    valor_maximo: 15.00,
-                    tipo: 'projeto'
-                }
-            ];
-        }
-
-        // Criar atividade (apenas professores) - COM VERIFICAÇÃO EXTRA
-        async function criarAtividade() {
-            // VERIFICAÇÃO DUPLA DE SEGURANÇA
-            if (currentUser.tipo !== 'professor' && currentUser.tipo !== 'admin') {
-                showError('❌ Acesso negado! Apenas professores podem criar atividades.');
-                // Redirecionar para aba segura
-                showTab('inicio');
-                return;
-            }
-
-            const titulo = document.getElementById('activity-titulo').value;
-            const descricao = document.getElementById('activity-descricao').value;
-            const data_entrega = document.getElementById('activity-data-entrega').value;
-            const valor_maximo = document.getElementById('activity-valor').value;
-
-            if (!titulo || !data_entrega) {
-                showError('Preencha todos os campos obrigatórios');
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE}/atividades`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        titulo,
-                        descricao,
-                        tipo: 'trabalho',
-                        data_entrega,
-                        valor_maximo: parseFloat(valor_maximo),
-                        instrucoes: '',
-                        anexos_permitidos: true
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok && data.success) {
-                    showSuccess('Atividade criada com sucesso!');
-                    // Limpar formulário
-                    document.getElementById('activity-titulo').value = '';
-                    document.getElementById('activity-descricao').value = '';
-                    document.getElementById('activity-data-entrega').value = '';
-                    document.getElementById('activity-valor').value = '10.00';
-                    
-                    // Voltar para aba de atividades
-                    showTab('atividades');
-                } else {
-                    showError(data.error || 'Erro ao criar atividade');
-                }
-            } catch (error) {
-                showError('Erro ao criar atividade');
-            }
-        }
-
-        // Logout
-        function logout() {
-            localStorage.removeItem('token');
-            currentUser = null;
-            token = null;
-            showLogin();
-        }
-
-        // Utilitários
-        function showError(message) {
-            alert(`❌ ${message}`);
-        }
-
-        function showSuccess(message) {
-            alert(`✅ ${message}`);
-        }
+        });
     </script>
 </body>
 </html>
