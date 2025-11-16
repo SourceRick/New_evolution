@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByteWave - Sistema de Atividades</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Cores modo diurno */
+            --primary: #2563eb;
+            --secondary: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            /* Cores modo noturno */
+            --primary: #3b82f6;
+            --secondary: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        /* Botões */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Formulários */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+            background: var(--surface);
+            color: var(--text);
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Navegação */
+        .nav-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 16px 24px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-tab:hover {
+            background: var(--background);
+        }
+
+        /* Utilidades */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-3 {
+            margin-bottom: 16px;
+        }
+
+        .mt-3 {
+            margin-top: 16px;
+        }
+
+        /* Posts e Atividades */
+        .post-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            background: var(--surface);
+        }
+
+        .post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .activity-item {
+            background: var(--background);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .activity-item:hover {
+            transform: translateX(4px);
+        }
+
+        /* Header */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Toggle de tema */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--background);
+        }
+
+        /* Badges */
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .badge-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .badge-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .badge-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Grid de cursos */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .course-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+            }
+
+            .nav-tab {
+                padding: 12px 16px;
+            }
+
+            .app-header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stat-number {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Tela de Login -->
+        <div id="login-screen" class="card">
+            <div class="text-center mb-3">
+                <div class="logo">
+                    <i class="fas fa-wave-square"></i>
+                    <span>ByteWave</span>
+                </div>
+                <p class="text-secondary">"Evoluímos com a onda da tecnologia"</p>
+            </div>
+            
+            <div class="form-group">
+                <input type="email" id="login-email" class="form-control" placeholder="Digite seu email ou CPF" value="prof.silva@email.com">
+            </div>
+            <div class="form-group">
+                <input type="password" id="login-senha" class="form-control" placeholder="Digite sua senha" value="password">
+            </div>
+            
+            <div class="form-group text-center">
+                <a href="#" style="color: var(--primary); text-decoration: none;">Esqueceu sua senha? Clique aqui.</a>
+            </div>
+
+            <button onclick="login()" class="btn btn-primary" style="width: 100%;">
+                <i class="fas fa-sign-in-alt"></i>
+                Confirmar
+            </button>
+            
+            <p class="text-center mt-3" style="color: var(--text-secondary);">
+                Não tem conta? <a href="#" onclick="showRegister()" style="color: var(--primary);">Cadastre-se</a>
+            </p>
+        </div>
+
+        <!-- Tela de Acessibilidade -->
+        <div id="accessibility-screen" class="card hidden">
+            <h2 class="text-center mb-3"><i class="fas fa-universal-access"></i> Acessibilidade</h2>
+            <p class="text-center mb-3">Você pode alterar as preferências de acessibilidade a qualquer momento no menu lateral.</p>
+            
+            <div class="form-group">
+                <button onclick="setAccessibility(true)" class="btn btn-primary" style="width: 100%; margin-bottom: 10px;">
+                    <i class="fas fa-check"></i>
+                    Sim, acessar
+                </button>
+                <button onclick="setAccessibility(false)" class="btn btn-secondary" style="width: 100%;">
+                    <i class="fas fa-times"></i>
+                    Não, continuar
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela de Registro -->
+        <div id="register-screen" class="card hidden">
+            <h2 style="text-align: center; margin-bottom: 24px;">
+                <i class="fas fa-user-plus"></i> Criar Nova Conta
+            </h2>
+            
+            <div class="form-group">
+                <label>Nome Completo</label>
+                <input type="text" id="register-nome" class="form-control" placeholder="Seu nome completo" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="register-email" class="form-control" placeholder="seu@email.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="register-senha" class="form-control" placeholder="Mínimo 6 caracteres" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Tipo de Usuário</label>
+                <select id="register-tipo" class="form-control">
+                    <option value="aluno">Aluno</option>
+                    <option value="professor">Professor</option>
+                </select>
+            </div>
+            
+            <button onclick="register()" class="btn btn-primary" style="width: 100%;">
+                <i class="fas fa-user-plus"></i> Criar Conta
+            </button>
+            
+            <p style="text-align: center; margin-top: 16px;">
+                Já tem conta? <a href="#" onclick="showLogin()" style="color: var(--primary);">Faça login</a>
+            </p>
+        </div>
+
+        <!-- Dashboard Principal -->
+        <div id="dashboard" class="hidden">
+            <!-- Header -->
+            <div class="app-header">
+                <div class="logo">
+                    <i class="fas fa-wave-square"></i>
+                    <span>ByteWave</span>
+                    <small style="font-size: 14px; color: var(--text-secondary);">"Evoluímos com a onda da tecnologia"</small>
+                </div>
+                
+                <div class="user-menu">
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                    </button>
+                    <span id="user-name">Usuário</span>
+                    <button onclick="logout()" class="btn btn-danger">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sair
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menu de Navegação -->
+            <div class="nav-tabs">
+                <div class="nav-tab active" onclick="showTab('inicio')">
+                    <i class="fas fa-home"></i>
+                    Início
+                </div>
+                <div class="nav-tab" onclick="showTab('cursos')">
+                    <i class="fas fa-book"></i>
+                    Cursos
+                </div>
+                <div class="nav-tab" onclick="showTab('atividades')">
+                    <i class="fas fa-tasks"></i>
+                    Atividades
+                </div>
+                <div class="nav-tab" onclick="showTab('trabalhos')">
+                    <i class="fas fa-file-alt"></i>
+                    Trabalhos
+                </div>
+                <div class="nav-tab" onclick="showTab('rede-social')">
+                    <i class="fas fa-users"></i>
+                    Rede Social
+                </div>
+                <div id="professor-tab" class="nav-tab hidden" onclick="showTab('criar-atividade')">
+                    <i class="fas fa-plus"></i>
+                    Nova Atividade
+                </div>
+            </div>
+
+            <!-- Conteúdo das Abas -->
+            <div class="tab-content">
+                <!-- Aba Início -->
+                <div id="inicio-tab" class="fade-in">
+                    <h2><i class="fas fa-graduation-cap"></i> Painel do Aluno</h2>
+                    
+                    <div class="card mt-3">
+                        <h3><i class="fas fa-bell"></i> Próximos Trabalhos</h3>
+                        <div class="activity-item">
+                            <h4><i class="fas fa-code"></i> Programação</h4>
+                            <p>Entrega: 12 de março</p>
+                            <span class="badge badge-warning">Pendente</span>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <h3><i class="fas fa-list-alt"></i> Atividades Recentes</h3>
+                        <div id="atividades-recentes">
+                            <!-- Atividades serão carregadas aqui -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aba Cursos -->
+                <div id="cursos-tab" class="hidden fade-in">
+                    <h2><i class="fas fa-book-open"></i> Meus Cursos</h2>
+                    <div class="courses-grid" id="cursos-list">
+                        <!-- Cursos serão carregados aqui -->
+                    </div>
+                </div>
+
+                <!-- Aba Atividades -->
+                <div id="atividades-tab" class="hidden fade-in">
+                    <h2><i class="fas fa-tasks"></i> Atividades Pendentes</h2>
+                    <div id="atividades-list">
+                        <!-- Atividades serão carregadas aqui -->
+                    </div>
+                </div>
+
+                <!-- Aba Trabalhos -->
+                <div id="trabalhos-tab" class="hidden fade-in">
+                    <h2><i class="fas fa-file-alt"></i> Meus Trabalhos</h2>
+                    <div id="trabalhos-list">
+                        <!-- Trabalhos serão carregados aqui -->
+                    </div>
+                </div>
+
+                <!-- Aba Rede Social -->
+                <div id="rede-social-tab" class="hidden fade-in">
+                    <h2><i class="fas fa-users"></i> Rede Social Acadêmica</h2>
+                    <div id="posts-list">
+                        <!-- Posts serão carregados aqui -->
+                    </div>
+                </div>
+
+                <!-- Aba Criar Atividade (Apenas Professor) -->
+                <div id="criar-atividade-tab" class="hidden fade-in">
+                    <h2><i class="fas fa-plus-circle"></i> Criar Nova Atividade</h2>
+                    <div class="card">
+                        <div class="form-group">
+                            <label>Título da Atividade</label>
+                            <input type="text" id="activity-titulo" class="form-control" placeholder="Ex: Trabalho de Programação Web">
+                        </div>
+                        <div class="form-group">
+                            <label>Descrição</label>
+                            <textarea id="activity-descricao" class="form-control" placeholder="Descreva a atividade..." rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Data de Entrega</label>
+                            <input type="datetime-local" id="activity-data-entrega" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Valor Máximo</label>
+                            <input type="number" id="activity-valor" class="form-control" value="10.00" step="0.01">
+                        </div>
+                        <button onclick="criarAtividade()" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Criar Atividade
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configurações
+        const API_BASE = 'http://localhost:3000/api';
+        let currentUser = null;
+        let token = localStorage.getItem('token');
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            applyTheme();
+            if (token) {
+                checkAuth();
+            }
+        });
+
+        // Sistema de Tema
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            localStorage.setItem('darkMode', isDarkMode);
+            applyTheme();
+        }
+
+        function applyTheme() {
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('theme-icon').className = 'fas fa-sun';
+            } else {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('theme-icon').className = 'fas fa-moon';
+            }
+        }
+
+        // Autenticação
+        async function checkAuth() {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                currentUser = payload;
+                showDashboard();
+                loadUserData();
+            } catch (error) {
+                localStorage.removeItem('token');
+                showLogin();
+            }
+        }
+
+        async function login() {
+            const email = document.getElementById('login-email').value;
+            const senha = document.getElementById('login-senha').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Mostrar tela de acessibilidade antes do dashboard
+                    showAccessibilityScreen();
+                    token = data.data.token;
+                    localStorage.setItem('token', token);
+                    currentUser = data.data.user;
+                } else {
+                    showError(data.error || 'Erro no login');
+                }
+            } catch (error) {
+                showError('Erro ao fazer login');
+            }
+        }
+
+        function showAccessibilityScreen() {
+            hideAllScreens();
+            document.getElementById('accessibility-screen').classList.remove('hidden');
+        }
+
+        function setAccessibility(access) {
+            if (access) {
+                // Aqui iriam as configurações de acessibilidade
+                console.log('Acessibilidade ativada');
+            }
+            showDashboard();
+            loadUserData();
+        }
+
+        // Funções de navegação entre telas
+        function showRegister() {
+            hideAllScreens();
+            document.getElementById('register-screen').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            hideAllScreens();
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        function showDashboard() {
+            hideAllScreens();
+            document.getElementById('dashboard').classList.remove('hidden');
+        }
+
+        function hideAllScreens() {
+            const screens = ['login-screen', 'accessibility-screen', 'dashboard', 'register-screen'];
+            screens.forEach(screen => {
+                const element = document.getElementById(screen);
+                if (element) {
+                    element.classList.add('hidden');
+                }
+            });
+        }
+
+        // Navegação entre abas
+        function showTab(tabName) {
+            // PROTEÇÃO: Impedir alunos de acessarem aba de criar atividade
+            if (tabName === 'criar-atividade' && currentUser && currentUser.tipo !== 'professor' && currentUser.tipo !== 'admin') {
+                showError('❌ Acesso restrito a professores');
+                showTab('inicio');
+                return;
+            }
+            
+            // Esconder todas as abas
+            document.querySelectorAll('.tab-content > div').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Remover active de todas as tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostrar aba selecionada
+            const targetTab = document.getElementById(`${tabName}-tab`);
+            if (targetTab) {
+                targetTab.classList.remove('hidden');
+            }
+            
+            // Adicionar active na tab clicada
+            event.target.classList.add('active');
+
+            // Carregar dados específicos da aba
+            switch(tabName) {
+                case 'inicio':
+                    loadDashboard();
+                    break;
+                case 'cursos':
+                    loadCursos();
+                    break;
+                case 'atividades':
+                    loadAtividades();
+                    break;
+                case 'trabalhos':
+                    loadTrabalhos();
+                    break;
+                case 'rede-social':
+                    loadPostsSociais();
+                    break;
+            }
+        }
+
+        // Carregar dados do usuário
+        function loadUserData() {
+            if (!currentUser) return;
+
+            document.getElementById('user-name').textContent = currentUser.nome;
+            
+            // MOSTRAR ABA DE PROFESSOR APENAS PARA PROFESSORES/ADMIN
+            if (currentUser.tipo === 'professor' || currentUser.tipo === 'admin') {
+                document.getElementById('professor-tab').classList.remove('hidden');
+            } else {
+                document.getElementById('professor-tab').classList.add('hidden');
+            }
+
+            loadDashboardData();
+        }
+
+        // Carregar dados do dashboard
+        function loadDashboardData() {
+            // Dados mock para exemplo
+            const atividadesHTML = `
+                <div class="activity-item">
+                    <h4><i class="fas fa-check-circle" style="color: var(--success);"></i> Avaliação - Trabalho 1</h4>
+                    <p>Status: <span class="badge badge-success">Entregue</span></p>
+                </div>
+                <div class="activity-item">
+                    <h4><i class="fas fa-comments" style="color: var(--warning);"></i> Fórum - Discussão sobre projeto</h4>
+                    <p>Status: <span class="badge badge-warning">Em andamento</span></p>
+                </div>
+                <div class="activity-item">
+                    <h4><i class="fas fa-book" style="color: var(--primary);"></i> Livro - Leitura de capítulo 4</h4>
+                    <p>Status: <span class="badge badge-success">Concluída</span></p>
+                </div>
+            `;
+            document.getElementById('atividades-recentes').innerHTML = atividadesHTML;
+        }
+
+        // Carregar cursos
+        function loadCursos() {
+            const cursosHTML = `
+                <div class="course-card" onclick="showCursoDetalhes('desenvolvimento-sistemas')">
+                    <h3><i class="fas fa-laptop-code"></i> Desenvolvimento de Sistemas</h3>
+                    <p>Curso de programação e desenvolvimento web</p>
+                    <div class="badge badge-primary">Sala 1</div>
+                </div>
+                <div class="course-card" onclick="showCursoDetalhes('mecatronica')">
+                    <h3><i class="fas fa-robot"></i> Mecatrônica</h3>
+                    <p>Automação e robótica industrial</p>
+                    <div class="badge badge-primary">Sala 2</div>
+                </div>
+            `;
+            document.getElementById('cursos-list').innerHTML = cursosHTML;
+        }
+
+        function showCursoDetalhes(curso) {
+            alert(`Detalhes do curso: ${curso}`);
+            // Aqui você pode implementar a navegação para detalhes do curso
+        }
+
+        async function register() {
+            const nome = document.getElementById('register-nome').value;
+            const email = document.getElementById('register-email').value;
+            const senha = document.getElementById('register-senha').value;
+            const tipo = document.getElementById('register-tipo').value;
+
+            // Validação básica
+            if (!nome || !email || !senha) {
+                showError('Preencha todos os campos');
+                return;
+            }
+
+            if (senha.length < 6) {
+                showError('A senha deve ter pelo menos 6 caracteres');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        nome, 
+                        email, 
+                        senha, 
+                        tipo 
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    showSuccess('Cadastro realizado com sucesso!');
+                    
+                    // Preencher automaticamente o login
+                    document.getElementById('login-email').value = email;
+                    document.getElementById('login-senha').value = senha;
+                    
+                    // Voltar para tela de login
+                    showLogin();
+                    
+                } else {
+                    showError(data.error || 'Erro no cadastro');
+                }
+
+            } catch (error) {
+                console.error('Erro no cadastro:', error);
+                showError('Erro de conexão. Verifique se o backend está rodando.');
+            }
+        }
+
+        // Carregar dashboard específico
+        async function loadDashboard() {
+            try {
+                const endpoint = currentUser.tipo === 'professor' ? '/dashboard/professor' : '/dashboard/aluno';
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        renderDashboard(data.data);
+                    } else {
+                        renderMockDashboard();
+                    }
+                } else {
+                    renderMockDashboard();
+                }
+            } catch (error) {
+                renderMockDashboard();
+            }
+        }
+
+        function renderDashboard(data) {
+            const dashboardHTML = currentUser.tipo === 'professor' 
+                ? renderProfessorDashboard(data)
+                : renderAlunoDashboard(data);
+            
+            document.getElementById('inicio-tab').innerHTML = `
+                <h2><i class="fas fa-graduation-cap"></i> Painel do ${currentUser.tipo === 'professor' ? 'Professor' : 'Aluno'}</h2>
+                ${dashboardHTML}
+            `;
+        }
+
+        function renderProfessorDashboard(data) {
+            return `
+                <div class="dashboard-grid">
+                    <div class="stats-grid">
+                        <div class="stat-card card">
+                            <i class="fas fa-tasks" style="font-size: 2em; color: var(--primary);"></i>
+                            <div class="stat-number">${data.total_atividades}</div>
+                            <div class="stat-label">Atividades Criadas</div>
+                        </div>
+                        <div class="stat-card card">
+                            <i class="fas fa-file-alt" style="font-size: 2em; color: var(--success);"></i>
+                            <div class="stat-number">${data.total_trabalhos}</div>
+                            <div class="stat-label">Trabalhos Entregues</div>
+                        </div>
+                        <div class="stat-card card">
+                            <i class="fas fa-clock" style="font-size: 2em; color: var(--warning);"></i>
+                            <div class="stat-number">${data.trabalhos_pendentes}</div>
+                            <div class="stat-label">Avaliações Pendentes</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-bell"></i> Atividades Recentes</h3>
+                        ${data.atividades_recentes.map(atividade => `
+                            <div class="activity-item">
+                                <h4>${atividade.titulo}</h4>
+                                <p>${atividade.descricao}</p>
+                                <small>Entrega: ${new Date(atividade.data_entrega).toLocaleDateString()}</small>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-history"></i> Trabalhos Recentes</h3>
+                        ${data.trabalhos_recentes.map(trabalho => `
+                            <div class="activity-item">
+                                <h4>${trabalho.titulo}</h4>
+                                <p>Aluno: ${trabalho.aluno_nome}</p>
+                                <p>Status: <span class="badge ${trabalho.nota ? 'badge-success' : 'badge-warning'}">
+                                    ${trabalho.nota ? `Avaliado: ${trabalho.nota}` : 'Pendente'}
+                                </span></p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAlunoDashboard(data) {
+            return `
+                <div class="dashboard-grid">
+                    <div class="stats-grid">
+                        <div class="stat-card card">
+                            <i class="fas fa-tasks" style="font-size: 2em; color: var(--primary);"></i>
+                            <div class="stat-number">${data.total_atividades}</div>
+                            <div class="stat-label">Total de Atividades</div>
+                        </div>
+                        <div class="stat-card card">
+                            <i class="fas fa-check-circle" style="font-size: 2em; color: var(--success);"></i>
+                            <div class="stat-number">${data.atividades_entregues}</div>
+                            <div class="stat-label">Entregues</div>
+                        </div>
+                        <div class="stat-card card">
+                            <i class="fas fa-clock" style="font-size: 2em; color: var(--warning);"></i>
+                            <div class="stat-number">${data.atividades_pendentes}</div>
+                            <div class="stat-label">Pendentes</div>
+                        </div>
+                        <div class="stat-card card">
+                            <i class="fas fa-star" style="font-size: 2em; color: var(--success);"></i>
+                            <div class="stat-number">${data.media_notas.toFixed(1)}</div>
+                            <div class="stat-label">Média</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3><i class="fas fa-bell"></i> Trabalhos Recentes</h3>
+                        ${data.trabalhos_recentes.map(trabalho => `
+                            <div class="activity-item">
+                                <h4>${trabalho.titulo}</h4>
+                                <p>Status: <span class="badge ${trabalho.nota ? 'badge-success' : 'badge-warning'}">
+                                    ${trabalho.nota ? `Nota: ${trabalho.nota}` : 'Aguardando avaliação'}
+                                </span></p>
+                                <small>Entregue em: ${new Date(trabalho.data_entrega).toLocaleDateString()}</small>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Dashboard mock para quando a API não estiver disponível
+        function renderMockDashboard() {
+            if (currentUser.tipo === 'professor') {
+                renderProfessorDashboard({
+                    total_atividades: 3,
+                    total_trabalhos: 8,
+                    trabalhos_pendentes: 2,
+                    atividades_recentes: [
+                        {
+                            titulo: 'Trabalho de Programação Web',
+                            descricao: 'Site responsivo com HTML/CSS/JS',
+                            data_entrega: '2025-11-06T23:59:00'
+                        },
+                        {
+                            titulo: 'Prova Banco de Dados', 
+                            descricao: 'Prova teórica sobre SQL',
+                            data_entrega: '2025-11-25T14:00:00'
+                        }
+                    ],
+                    trabalhos_recentes: [
+                        {
+                            titulo: 'Site Pessoal',
+                            aluno_nome: 'Aluno João',
+                            nota: 9.5
+                        },
+                        {
+                            titulo: 'Exercícios Algoritmos',
+                            aluno_nome: 'Aluna Maria', 
+                            nota: null
+                        }
+                    ]
+                });
+            } else {
+                renderAlunoDashboard({
+                    total_atividades: 4,
+                    atividades_entregues: 2,
+                    atividades_pendentes: 2,
+                    media_notas: 8.5,
+                    trabalhos_recentes: [
+                        {
+                            titulo: 'Meu Site Pessoal',
+                            nota: 9.5,
+                            data_entrega: '2025-11-13T14:30:00'
+                        },
+                        {
+                            titulo: 'Exercícios Algoritmos',
+                            nota: null,
+                            data_entrega: '2025-11-24T10:00:00'
+                        }
+                    ]
+                });
+            }
+        }
+
+        // Carregar atividades
+        async function loadAtividades() {
+            try {
+                // Mostrar loading
+                document.getElementById('atividades-list').innerHTML = `
+                    <div class="text-center" style="color: var(--text-secondary);">
+                        <div class="loading" style="margin: 20px auto;"></div>
+                        <br>Carregando atividades...
+                    </div>
+                `;
+
+                const response = await fetch(`${API_BASE}/atividades`, {
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                // Se a API responder com sucesso
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.data) {
+                        renderAtividades(data.data);
+                    } else {
+                        // Se a API responder mas sem dados, usar dados mock
+                        useMockAtividades();
+                    }
+                } else {
+                    // Se a API não responder, usar dados mock
+                    useMockAtividades();
+                }
+
+            } catch (error) {
+                console.log('API não disponível, usando dados de exemplo:', error);
+                useMockAtividades();
+            }
+        }
+
+        // Dados mock para quando a API não estiver disponível
+        function useMockAtividades() {
+            const mockAtividades = [
+                {
+                    id: 1,
+                    titulo: 'Trabalho de Programação Web',
+                    descricao: 'Desenvolver um site responsivo usando HTML, CSS e JavaScript. O tema é livre, mas deve conter pelo menos 3 páginas.',
+                    data_entrega: '2025-11-15T23:59:00',
+                    professor_nome: 'Prof. Silva',
+                    valor_maximo: 10.00,
+                    tipo: 'trabalho'
+                },
+                {
+                    id: 2,
+                    titulo: 'Prova de Banco de Dados',
+                    descricao: 'Prova teórica sobre modelagem ER, normalização e comandos SQL avançados.',
+                    data_entrega: '2025-11-21T14:00:00', 
+                    professor_nome: 'Prof. Santos',
+                    valor_maximo: 8.00,
+                    tipo: 'prova'
+                },
+                {
+                    id: 3,
+                    titulo: 'Projeto de Sistema Acadêmico',
+                    descricao: 'Em grupo, desenvolver um sistema completo de gestão acadêmica com cadastro de alunos, professores e disciplinas.',
+                    data_entrega: '2025-11-19T23:59:00',
+                    professor_nome: 'Prof. Oliveira',
+                    valor_maximo: 15.00,
+                    tipo: 'projeto'
+                },
+                {
+                    id: 4,
+                    titulo: 'Exercícios de Algoritmos',
+                    descricao: 'Lista de exercícios sobre estruturas de repetição e condicionais. Entregar em papel.',
+                    data_entrega: '2025-11-08T12:00:00',
+                    professor_nome: 'Prof. Costa',
+                    valor_maximo: 5.00,
+                    tipo: 'exercicio'
+                }
+            ];
+            
+            renderAtividades(mockAtividades);
+        }
+
+        function renderAtividades(atividades) {
+            const list = document.getElementById('atividades-list');
+            
+            if (!atividades || atividades.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center" style="color: var(--text-secondary); padding: 40px;">
+                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 16px;"></i>
+                        <br>
+                        <h3>Nenhuma atividade pendente</h3>
+                        <p>Quando houver novas atividades, elas aparecerão aqui.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = atividades.map(atividade => {
+                const dataEntrega = new Date(atividade.data_entrega);
+                const agora = new Date();
+                const diasRestantes = Math.ceil((dataEntrega - agora) / (1000 * 60 * 60 * 24));
+                
+                let status = '';
+                let statusClass = '';
+                
+                if (diasRestantes < 0) {
+                    status = 'Atrasada';
+                    statusClass = 'badge-danger';
+                } else if (diasRestantes === 0) {
+                    status = 'Entrega hoje';
+                    statusClass = 'badge-warning';
+                } else if (diasRestantes <= 3) {
+                    status = `Entrega em ${diasRestantes} dia${diasRestantes > 1 ? 's' : ''}`;
+                    statusClass = 'badge-warning';
+                } else {
+                    status = `Entrega em ${diasRestantes} dias`;
+                    statusClass = 'badge-primary';
+                }
+
+                const tipoIcon = {
+                    'trabalho': 'fa-file-alt',
+                    'prova': 'fa-clipboard-check',
+                    'projeto': 'fa-project-diagram',
+                    'exercicio': 'fa-pencil-alt'
+                }[atividade.tipo] || 'fa-tasks';
+
+                return `
+                    <div class="activity-item">
+                        <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 12px;">
+                            <div style="flex: 1;">
+                                <h4 style="margin: 0 0 8px 0;">
+                                    <i class="fas ${tipoIcon}" style="color: var(--primary); margin-right: 8px;"></i>
+                                    ${atividade.titulo}
+                                </h4>
+                                <p style="margin: 0; color: var(--text-secondary);">${atividade.descricao || 'Sem descrição'}</p>
+                            </div>
+                            <span class="badge ${statusClass}">${status}</span>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; flex-wrap: wrap; gap: 12px;">
+                            <div style="font-size: 14px; color: var(--text-secondary);">
+                                <div><strong><i class="fas fa-user-graduate"></i> Professor:</strong> ${atividade.professor_nome}</div>
+                                <div><strong><i class="fas fa-clock"></i> Entrega:</strong> ${dataEntrega.toLocaleString('pt-BR')}</div>
+                                <div><strong><i class="fas fa-star"></i> Valor:</strong> ${atividade.valor_maximo} pontos</div>
+                            </div>
+                            <button onclick="entregarTrabalho(${atividade.id})" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i>
+                                Entregar Trabalho
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Carregar trabalhos do usuário
+        async function loadTrabalhos() {
+            try {
+                document.getElementById('trabalhos-list').innerHTML = `
+                    <div class="text-center" style="color: var(--text-secondary);">
+                        <div class="loading" style="margin: 20px auto;"></div>
+                        <br>Carregando seus trabalhos...
+                    </div>
+                `;
+
+                const response = await fetch(`${API_BASE}/trabalhos`, {
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.data) {
+                        renderTrabalhos(data.data);
+                    } else {
+                        renderMockTrabalhos();
+                    }
+                } else {
+                    renderMockTrabalhos();
+                }
+            } catch (error) {
+                console.log('API não disponível, usando dados de exemplo');
+                renderMockTrabalhos();
+            }
+        }
+
+        function renderTrabalhos(trabalhos) {
+            const list = document.getElementById('trabalhos-list');
+            
+            if (!trabalhos || trabalhos.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center" style="color: var(--text-secondary); padding: 40px;">
+                        <i class="fas fa-file-alt" style="font-size: 48px; margin-bottom: 16px;"></i>
+                        <br>
+                        <h3>Nenhum trabalho enviado</h3>
+                        <p>Seus trabalhos aparecerão aqui após a entrega.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = trabalhos.map(trabalho => {
+                const statusClass = trabalho.nota ? 'badge-success' : 'badge-warning';
+                const statusText = trabalho.nota ? `Avaliado: ${trabalho.nota}` : 'Aguardando avaliação';
+                
+                return `
+                    <div class="activity-item">
+                        <h4>${trabalho.titulo}</h4>
+                        <p>${trabalho.conteudo || 'Sem descrição'}</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; flex-wrap: wrap; gap: 12px;">
+                            <div style="font-size: 14px; color: var(--text-secondary);">
+                                <div><strong>Entregue em:</strong> ${new Date(trabalho.data_entrega).toLocaleString('pt-BR')}</div>
+                                <div><strong>Visibilidade:</strong> ${trabalho.visibilidade}</div>
+                            </div>
+                            <span class="badge ${statusClass}">${statusText}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderMockTrabalhos() {
+            const mockTrabalhos = [
+                {
+                    id: 1,
+                    titulo: 'Meu Site Pessoal',
+                    conteudo: 'Desenvolvi um site pessoal com portfolio usando HTML, CSS e JavaScript',
+                    data_entrega: '2025-10-30T14:30:00',
+                    nota: 9.5,
+                    visibilidade: 'publico',
+                    status: 'avaliado'
+                },
+                {
+                    id: 2,
+                    titulo: 'Exercícios de Algoritmos',
+                    conteudo: 'Resolução dos exercícios propostos sobre estruturas de repetição',
+                    data_entrega: '2025-11-12T10:00:00',
+                    nota: null,
+                    visibilidade: 'privado',
+                    status: 'entregue'
+                }
+            ];
+            
+            renderTrabalhos(mockTrabalhos);
+        }
+
+        // Carregar posts da rede social
+        async function loadPostsSociais() {
+            try {
+                document.getElementById('posts-list').innerHTML = `
+                    <div class="text-center" style="color: var(--text-secondary);">
+                        <div class="loading" style="margin: 20px auto;"></div>
+                        <br>Carregando posts da comunidade...
+                    </div>
+                `;
+
+                const response = await fetch(`${API_BASE}/social/posts`, {
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.data) {
+                        renderPostsSociais(data.data);
+                    } else {
+                        renderMockPostsSociais();
+                    }
+                } else {
+                    renderMockPostsSociais();
+                }
+            } catch (error) {
+                console.log('API não disponível, usando dados de exemplo');
+                renderMockPostsSociais();
+            }
+        }
+
+        function renderPostsSociais(posts) {
+            const list = document.getElementById('posts-list');
+            
+            if (!posts || posts.length === 0) {
+                list.innerHTML = `
+                    <div class="text-center" style="color: var(--text-secondary); padding: 40px;">
+                        <i class="fas fa-users" style="font-size: 48px; margin-bottom: 16px;"></i>
+                        <br>
+                        <h3>Nenhum post público</h3>
+                        <p>Quando alunos compartilharem trabalhos públicos, eles aparecerão aqui.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = posts.map(post => {
+                return `
+                    <div class="post-card">
+                        <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                            <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                <i class="fas fa-user" style="color: white;"></i>
+                            </div>
+                            <div>
+                                <strong>${post.autor_nome}</strong>
+                                <div style="font-size: 12px; color: var(--text-secondary);">
+                                    ${new Date(post.criado_em).toLocaleString('pt-BR')}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4 style="margin-bottom: 8px;">${post.titulo}</h4>
+                        <p style="margin-bottom: 16px; color: var(--text-secondary);">${post.conteudo}</p>
+                        
+                        <div style="display: flex; gap: 16px; margin-top: 12px; color: var(--text-secondary);">
+                            <button onclick="curtirPost(${post.id})" class="btn btn-sm" style="background: none; border: none; color: var(--text-secondary);">
+                                <i class="fas fa-heart"></i> ${post.total_curtidas} curtidas
+                            </button>
+                            <span>
+                                <i class="fas fa-comment"></i> ${post.total_comentarios} comentários
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderMockPostsSociais() {
+            const mockPosts = [
+                {
+                    id: 1,
+                    titulo: 'Meu Site Pessoal - Feedback',
+                    conteudo: 'Gostaria de feedback no meu site pessoal que desenvolvi para a disciplina de Programação Web! Aceito sugestões para melhorar o design e acessibilidade.',
+                    autor_nome: 'Aluno João',
+                    total_curtidas: 5,
+                    total_comentarios: 3,
+                    criado_em: '2025-03-11T15:30:00'
+                },
+                {
+                    id: 2,
+                    titulo: 'Dúvida sobre SQL Avançado',
+                    conteudo: 'Alguém pode me ajudar com subqueries no MySQL? Estou com dificuldade em entender quando usar EXISTS vs IN.',
+                    autor_nome: 'Aluna Maria',
+                    total_curtidas: 2,
+                    total_comentarios: 5,
+                    criado_em: '2025-11-16T09:15:00'
+                }
+            ];
+            
+            renderPostsSociais(mockPosts);
+        }
+
+        // Função para curtir posts
+        async function curtirPost(postId) {
+            try {
+                const response = await fetch(`${API_BASE}/social/posts/${postId}/curtir`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    showSuccess('Post curtido!');
+                    loadPostsSociais(); // Recarregar posts
+                } else {
+                    showError('Erro ao curtir post');
+                }
+            } catch (error) {
+                console.log('API não disponível, simulando curtida');
+                showSuccess('Post curtido!');
+                // Em produção, você recarregaria os posts da API
+            }
+        }
+
+        // Entregar trabalho - Versão melhorada com modal
+        async function entregarTrabalho(idAtividade) {
+            // Encontrar a atividade nos dados mock
+            const atividades = await getAtividadesData();
+            const atividade = atividades.find(a => a.id === idAtividade);
+            
+            if (!atividade) {
+                showError('Atividade não encontrada');
+                return;
+            }
+
+            // Criar modal de entrega
+            const modalHTML = `
+                <div id="modal-overlay" style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.5);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1000;
+                ">
+                    <div style="
+                        background: var(--surface);
+                        padding: 24px;
+                        border-radius: 12px;
+                        width: 90%;
+                        max-width: 500px;
+                        border: 1px solid var(--border);
+                    ">
+                        <h3 style="margin-bottom: 16px;">
+                            <i class="fas fa-paper-plane"></i>
+                            Entregar Trabalho
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label><strong>Atividade:</strong> ${atividade.titulo}</label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Título do seu trabalho:</label>
+                            <input type="text" id="modal-titulo" class="form-control" placeholder="Ex: Meu Projeto de Programação">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Descrição/Conteúdo:</label>
+                            <textarea id="modal-conteudo" class="form-control" placeholder="Descreva seu trabalho..." rows="4"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Visibilidade:</label>
+                            <select id="modal-visibilidade" class="form-control">
+                                <option value="privado">Privado (apenas professor)</option>
+                                <option value="turma">Turma (colegas da turma)</option>
+                                <option value="publico">Público (toda a comunidade)</option>
+                            </select>
+                        </div>
+                        
+                        <div style="display: flex; gap: 12px; margin-top: 20px;">
+                            <button onclick="fecharModal()" class="btn btn-secondary" style="flex: 1;">
+                                <i class="fas fa-times"></i>
+                                Cancelar
+                            </button>
+                            <button onclick="confirmarEntrega(${idAtividade})" class="btn btn-primary" style="flex: 1;">
+                                <i class="fas fa-check"></i>
+                                Confirmar Entrega
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+
+        function fecharModal() {
+            const modal = document.getElementById('modal-overlay');
+            if (modal) modal.remove();
+        }
+
+        async function confirmarEntrega(idAtividade) {
+            const titulo = document.getElementById('modal-titulo').value;
+            const conteudo = document.getElementById('modal-conteudo').value;
+            const visibilidade = document.getElementById('modal-visibilidade').value;
+
+            if (!titulo.trim()) {
+                showError('Digite um título para seu trabalho');
+                return;
+            }
+
+            if (!conteudo.trim()) {
+                showError('Descreva o conteúdo do seu trabalho');
+                return;
+            }
+
+            try {
+                // Simular envio para API
+                console.log('Enviando trabalho:', { idAtividade, titulo, conteudo, visibilidade });
+                
+                // Mostrar loading
+                showSuccess('Enviando trabalho...');
+                
+                // Simular delay de rede
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Fechar modal
+                fecharModal();
+                
+                // Mostrar sucesso
+                showSuccess('🎉 Trabalho entregue com sucesso!');
+                
+                // Recarregar atividades (opcional)
+                // loadAtividades();
+                
+            } catch (error) {
+                showError('Erro ao entregar trabalho: ' + error.message);
+            }
+        }
+
+        // Função auxiliar para obter dados das atividades
+        async function getAtividadesData() {
+            return [
+                {
+                    id: 1,
+                    titulo: 'Trabalho de Programação Web',
+                    descricao: 'Desenvolver um site responsivo usando HTML, CSS e JavaScript',
+                    data_entrega: '2025-11-15T23:59:00',
+                    professor_nome: 'Prof. Silva',
+                    valor_maximo: 10.00,
+                    tipo: 'trabalho'
+                },
+                {
+                    id: 2,
+                    titulo: 'Prova de Banco de Dados',
+                    descricao: 'Prova teórica sobre modelagem e SQL',
+                    data_entrega: '2025-11-20T14:00:00', 
+                    professor_nome: 'Prof. Santos',
+                    valor_maximo: 8.00,
+                    tipo: 'prova'
+                },
+                {
+                    id: 3,
+                    titulo: 'Projeto de Sistema Acadêmico',
+                    descricao: 'Em grupo, desenvolver um sistema completo de gestão acadêmica',
+                    data_entrega: '2025-12-10T23:59:00',
+                    professor_nome: 'Prof. Oliveira',
+                    valor_maximo: 15.00,
+                    tipo: 'projeto'
+                }
+            ];
+        }
+
+        // Criar atividade (apenas professores) - COM VERIFICAÇÃO EXTRA
+        async function criarAtividade() {
+            // VERIFICAÇÃO DUPLA DE SEGURANÇA
+            if (currentUser.tipo !== 'professor' && currentUser.tipo !== 'admin') {
+                showError('❌ Acesso negado! Apenas professores podem criar atividades.');
+                // Redirecionar para aba segura
+                showTab('inicio');
+                return;
+            }
+
+            const titulo = document.getElementById('activity-titulo').value;
+            const descricao = document.getElementById('activity-descricao').value;
+            const data_entrega = document.getElementById('activity-data-entrega').value;
+            const valor_maximo = document.getElementById('activity-valor').value;
+
+            if (!titulo || !data_entrega) {
+                showError('Preencha todos os campos obrigatórios');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/atividades`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        titulo,
+                        descricao,
+                        tipo: 'trabalho',
+                        data_entrega,
+                        valor_maximo: parseFloat(valor_maximo),
+                        instrucoes: '',
+                        anexos_permitidos: true
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    showSuccess('Atividade criada com sucesso!');
+                    // Limpar formulário
+                    document.getElementById('activity-titulo').value = '';
+                    document.getElementById('activity-descricao').value = '';
+                    document.getElementById('activity-data-entrega').value = '';
+                    document.getElementById('activity-valor').value = '10.00';
+                    
+                    // Voltar para aba de atividades
+                    showTab('atividades');
+                } else {
+                    showError(data.error || 'Erro ao criar atividade');
+                }
+            } catch (error) {
+                showError('Erro ao criar atividade');
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('token');
+            currentUser = null;
+            token = null;
+            showLogin();
+        }
+
+        // Utilitários
+        function showError(message) {
+            alert(`❌ ${message}`);
+        }
+
+        function showSuccess(message) {
+            alert(`✅ ${message}`);
+        }
+    </script>
+</body>
+</html>
